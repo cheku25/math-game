@@ -1,0 +1,71 @@
+let score = 0;
+let questionCount = 1;
+const questionEl = document.getElementById('question');
+const answerInput = document.getElementById('answerInput');
+const feedbackEl = document.getElementById('feedback');
+const scoreEl = document.getElementById('score');
+const qCountEl = document.getElementById('qCount');
+
+function generateQuestion() {
+  const operators = ['+', '-', '*', '/', 'BODMAS'];
+  const type = operators[Math.floor(Math.random() * operators.length)];
+
+  let question, answer;
+
+  switch(type) {
+    case '+':
+      let a1 = rand(1, 100), b1 = rand(1, 100);
+      question = `${a1} + ${b1}`;
+      answer = a1 + b1;
+      break;
+    case '-':
+      let a2 = rand(50, 100), b2 = rand(1, 50);
+      question = `${a2} - ${b2}`;
+      answer = a2 - b2;
+      break;
+    case '*':
+      let a3 = rand(1, 20), b3 = rand(1, 10);
+      question = `${a3} × ${b3}`;
+      answer = a3 * b3;
+      break;
+    case '/':
+      let b4 = rand(1, 10), a4 = b4 * rand(1, 10);
+      question = `${a4} ÷ ${b4}`;
+      answer = a4 / b4;
+      break;
+    case 'BODMAS':
+      let x = rand(1, 10), y = rand(1, 10), z = rand(1, 10);
+      question = `(${x} + ${y}) × ${z}`;
+      answer = (x + y) * z;
+      break;
+  }
+
+  questionEl.textContent = question;
+  questionEl.dataset.answer = answer;
+}
+
+function checkAnswer() {
+  const userAnswer = parseFloat(answerInput.value);
+  const correctAnswer = parseFloat(questionEl.dataset.answer);
+
+  if (!isNaN(userAnswer) && Math.abs(userAnswer - correctAnswer) < 0.001) {
+    score++;
+    feedbackEl.textContent = "✅ Correct!";
+    feedbackEl.style.color = "green";
+  } else {
+    feedbackEl.textContent = `❌ Wrong! Correct: ${correctAnswer}`;
+    feedbackEl.style.color = "red";
+  }
+
+  scoreEl.textContent = score;
+  questionCount++;
+  qCountEl.textContent = questionCount;
+  answerInput.value = '';
+  generateQuestion();
+}
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+generateQuestion();
